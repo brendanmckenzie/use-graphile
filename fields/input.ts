@@ -2,7 +2,6 @@ import React from "react";
 
 export type InputProps = {
   value: any;
-  reset: () => void;
   onChange: (
     ev: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -18,7 +17,6 @@ export const input = (
 ): InputProps => {
   return {
     value: value || "",
-    reset: () => onChange(key, initialValue),
     onChange: (
       ev: React.ChangeEvent<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
