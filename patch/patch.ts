@@ -1,5 +1,6 @@
 import { patchMulti } from "./patchMulti";
 import { patchLink } from "./patchLink";
+import { Model } from "../model";
 
 const parseValue = (type: string, value: any) => {
   switch (type) {
@@ -12,7 +13,7 @@ const parseValue = (type: string, value: any) => {
 };
 
 export const buildPatch = (
-  config: any,
+  config: Model,
   type: string,
   originalValues: any,
   newValues: any

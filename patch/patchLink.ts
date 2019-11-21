@@ -1,11 +1,16 @@
 import { buildPatch } from "./patch";
+import { FieldDef, Model } from "../model";
 
 export const patchLink = (
-  config: any,
-  fieldDef: any,
+  config: Model,
+  fieldDef: FieldDef,
   originalVal: any,
   newVal: any
 ) => {
+  if (!fieldDef.patchProperty) {
+    return {};
+  }
+
   if (originalVal && newVal && originalVal.id === newVal.id) {
     // updateById... maybe
     const patch = buildPatch(config, fieldDef.type, originalVal, newVal);

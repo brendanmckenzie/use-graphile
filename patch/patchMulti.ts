@@ -1,11 +1,16 @@
 import { buildPatch } from "./patch";
+import { Model, FieldDef } from "../model";
 
 export const patchMulti = (
-  config: any,
-  fieldDef: any,
+  config: Model,
+  fieldDef: FieldDef,
   originalVal: any,
   newVal: any
 ) => {
+  if (!fieldDef.patchProperty) {
+    return {};
+  }
+
   const originalValSafe = (originalVal || {}).nodes || [];
   const newValSafe = (newVal || {}).nodes || [];
 
