@@ -19,8 +19,14 @@ export const buildOps = (
   const safeInitialValues = initialValues || {};
   return {
     reset: () => setValues(initialValues),
-    input: (key: string): InputProps =>
-      input(key, safeValues[key], safeInitialValues[key], handleChange),
+    input: (key: string, checkbox: boolean = false): InputProps =>
+      input(
+        key,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange,
+        checkbox
+      ),
     link: (key: string, render: RenderLinkField) =>
       link(key, safeValues[key], safeInitialValues[key], handleChange, render),
     multi: (key: string, render: RenderMultiField) =>
