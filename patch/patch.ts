@@ -24,7 +24,7 @@ export const buildPatch = (
     const originalVal = originalValues[key];
     const newVal = newValues[key];
 
-    if (fieldDef.type && fieldDef.type.multi) {
+    if (fieldDef.type && fieldDef.multi) {
       // link multi field
       return { ...p, ...patchMulti(config, fieldDef, originalVal, newVal) };
     } else if (typeDef[fieldDef.type]) {
