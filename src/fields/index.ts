@@ -1,12 +1,14 @@
 import { input, InputProps } from "./input";
 import { link, RenderLinkField } from "./link";
 import { multi, RenderMultiField } from "./multi";
+import { select, SelectOptions } from "./select";
 
 export type Operations = {
   reset: () => void;
   input: (key: string) => InputProps;
   link: (key: string, render: RenderLinkField) => any;
   multi: (key: string, render: RenderMultiField) => any;
+  select: (key: string, options: SelectOptions) => any;
 };
 
 export const buildOps = (
@@ -30,6 +32,14 @@ export const buildOps = (
     link: (key: string, render: RenderLinkField) =>
       link(key, safeValues[key], safeInitialValues[key], handleChange, render),
     multi: (key: string, render: RenderMultiField) =>
-      multi(key, safeValues[key], safeInitialValues[key], handleChange, render)
+      multi(key, safeValues[key], safeInitialValues[key], handleChange, render),
+    select: (key: string, options: SelectOptions) =>
+      select(
+        key,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange,
+        options
+      )
   };
 };
