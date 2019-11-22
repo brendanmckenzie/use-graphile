@@ -47,6 +47,20 @@ This will return the props required to hook up a standard `<input />` field, pro
 
 Specifying `true` to the `checkbox` parameter will slightly modify the value props passed back by this method - `checked` will be used rather than `value`
 
+```jsx
+<input {...g.input("example", true)} />
+```
+
+---
+
+`textarea: (key: string)`
+
+This works exactly the same as `input()` but is specifically for `<textarea />` fields.
+
+```jsx
+<textarea {...g.textarea("example")} />
+```
+
 ---
 
 `link: (key: string, render: RenderLinkField)`

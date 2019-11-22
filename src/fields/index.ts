@@ -1,4 +1,5 @@
 import { input, InputProps } from "./input";
+import { textarea, TextAreaProps } from "./textarea";
 import { link, RenderLinkField } from "./link";
 import { multi, RenderMultiField } from "./multi";
 import { select, SelectOptions } from "./select";
@@ -6,6 +7,7 @@ import { select, SelectOptions } from "./select";
 export type Operations = {
   reset: () => void;
   input: (key: string) => InputProps;
+  textarea: (key: string) => TextAreaProps;
   link: (key: string, render: RenderLinkField) => any;
   multi: (key: string, render: RenderMultiField) => any;
   select: (key: string, options: SelectOptions) => any;
@@ -29,6 +31,8 @@ export const buildOps = (
         handleChange,
         checkbox
       ),
+    textarea: (key: string): TextAreaProps =>
+      textarea(key, safeValues[key], safeInitialValues[key], handleChange),
     link: (key: string, render: RenderLinkField) =>
       link(key, safeValues[key], safeInitialValues[key], handleChange, render),
     multi: (key: string, render: RenderMultiField) =>

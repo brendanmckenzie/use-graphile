@@ -1,12 +1,9 @@
 import React from "react";
 
-export type InputProps = {
-  value?: any;
-  checked?: boolean;
-  onChange: (
-    ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
-};
+export type InputProps = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+>;
 
 export const input = (
   key: string,
@@ -17,20 +14,17 @@ export const input = (
 ): InputProps => {
   if (checkbox) {
     return {
+      type: "checkbox",
       checked: !!value,
-      onChange: (
-        ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      ) => onChange(key, (ev.currentTarget as HTMLInputElement).checked)
+      onChange: ev => onChange(key, ev.currentTarget.checked)
     };
   }
   return {
     value: value || "",
-    onChange: (ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    onChange: ev =>
       onChange(
         key,
-        checkbox
-          ? (ev.currentTarget as HTMLInputElement).checked
-          : ev.currentTarget.value
+        checkbox ? ev.currentTarget.checked : ev.currentTarget.value
       )
   };
 };
