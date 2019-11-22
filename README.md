@@ -6,6 +6,32 @@ This works by generating patches that match the required format described by the
 
 An example model can be [found here](examples/model.ts), and a very messy example of a component consuming the hook can be [found here](examples/App.tsx).
 
+## Quick demo
+
+```jsx
+<form>
+  <label>Summary</label>
+  <input {...g.input("summary")} />
+  <hr />
+  <label>Customer</label>
+  {g.link("trip", l => (
+    <>
+      <label>trip name</label>
+      <input {...l.input("name")} />
+      <button onClick={l.reset}>Reset</button>
+    </>
+  ))}
+
+  <pre>{JSON.stringify(g.patch, null, 2)}</pre>
+  <button type="button" onClick={handleSave} disabled={g.clean}>
+    Save
+  </button>
+  <button type="reset" onClick={g.reset} disabled={g.clean}>
+    Reset
+  </button>
+</form>
+```
+
 ### Authors
 
 - [Brendan McKenzie](https://www.brendanmckenzie.com/)

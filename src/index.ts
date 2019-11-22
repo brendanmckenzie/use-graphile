@@ -8,6 +8,7 @@ export type Model = Model;
 type Graphile = {
   values: any;
   patch: any;
+  clean: boolean;
 } & Operations;
 
 const useGraphile = (
@@ -24,9 +25,12 @@ const useGraphile = (
   const handleChange = (key: string, value: any) =>
     setValues({ ...values, [key]: value });
 
+  const patch = buildPatch(model, rootType, initialValues, values);
+
   const g: Graphile = {
     values,
-    patch: buildPatch(model, rootType, initialValues, values),
+    patch,
+    clean: Object.keys(patch).length === 0,
     ...buildOps(values, initialValues, setValues, handleChange)
   };
 
