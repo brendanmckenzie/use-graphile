@@ -8,7 +8,7 @@ export type SelectProps = {
 
 export type SelectOptions = {
   list?: any[];
-  listAsync?: Promise<any[]>;
+  listAsync?: () => Promise<any[]>;
   valueKey: string;
   displayKey: string;
 };
@@ -25,7 +25,7 @@ export const select = (
   if (options.list) {
     setList(options.list);
   } else if (options.listAsync) {
-    options.listAsync.then(setList);
+    options.listAsync().then(setList);
   }
 
   return {
