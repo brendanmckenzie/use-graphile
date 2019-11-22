@@ -8,15 +8,17 @@ An example model can be [found here](examples/model.ts), and a very messy exampl
 
 ## Quick demo
 
+Given this form configuration.
+
 ```jsx
 <form>
   <label>Summary</label>
   <input {...g.input("summary")} />
   <hr />
   <label>Customer</label>
-  {g.link("trip", l => (
+  {g.link("customer", l => (
     <>
-      <label>trip name</label>
+      <label>Name</label>
       <input {...l.input("name")} />
       <button onClick={l.reset}>Reset</button>
     </>
@@ -30,6 +32,19 @@ An example model can be [found here](examples/model.ts), and a very messy exampl
     Reset
   </button>
 </form>
+```
+
+This is an example of a generated patch.
+
+```json
+{
+  "customerToCustomerId": {
+    "create": {
+      "name": "test"
+    }
+  },
+  "summary": "hello"
+}
 ```
 
 ### Authors
