@@ -7,6 +7,6 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "exclude": ["./examples"],
+  "exclude": ["node_modules", "tests", "dist", "examples"],
   "include": ["./src"]
 }
