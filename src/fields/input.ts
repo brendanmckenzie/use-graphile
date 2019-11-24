@@ -20,6 +20,7 @@ export const input = (
     };
   }
   return {
+    name: key,
     value: value || "",
     onChange: ev =>
       onChange(

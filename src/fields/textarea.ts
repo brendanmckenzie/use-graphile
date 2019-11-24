@@ -12,6 +12,7 @@ export const textarea = (
   onChange: (key: string, value: any) => void
 ): TextAreaProps => {
   return {
+    name: key,
     value: value || "",
     onChange: ev => onChange(key, ev.currentTarget.value)
   };
