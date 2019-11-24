@@ -33,7 +33,7 @@ const g = useGraphile(model, "customer", {});
 
 This would instantiate our hook, letting it know we are working with the `customer` type defined in the model.
 
-### Available methods
+#### Available methods
 
 Once the hook is instantiated, the following methods are available (following the above example, these methods would be accessible on the `g` object).
 
@@ -140,6 +140,32 @@ const selectConfig: SelectOptions = {
 <select {...g.select("trips", selectConfig)} />
 ```
 
+### Model configuration
+
+The purpose of the model configuration is to inform the patching process of how to link entities.
+
+With that in mind, you do not need to explicitly declare all fields available in your model. You simply need to define the links between entities.
+
+This is an acceptable model configuration.
+
+```ts
+export const model: Model = {
+  customer: {},
+  quote: {},
+  trip: {
+    customer: {
+      type: "customer",
+      patchProperty: "customerToCustomerId"
+    },
+    quotes: {
+      type: "quote",
+      multi: true,
+      patchProperty: "quotesUsingId"
+    }
+  }
+};
+```
+
 ## Quick demo
 
 Given this form configuration.
@@ -161,8 +187,11 @@ return (
       </>
     ))}
 
-    <pre>{JSON.stringify(g.patch, null, 2)}</pre>
-    <button type="button" onClick={handleSave} disabled={g.clean}>
+    <button
+      type="button"
+      onClick={() => alert(JSON.stringify(g.buildPatch()))}
+      disabled={g.clean}
+    >
       Save
     </button>
     <button type="reset" onClick={g.reset} disabled={g.clean}>
