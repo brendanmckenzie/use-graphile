@@ -37,7 +37,7 @@ This would instantiate our hook, letting it know we are working with the `custom
 
 Once the hook is instantiated, the following methods are available (following the above example, these methods would be accessible on the `g` object).
 
-`input: (key: string, checkbox: boolean = false)`
+`input: (key: string)`
 
 This will return the props required to hook up a standard `<input />` field, providing the input with its current value as well as an `onChange` method.
 
@@ -45,10 +45,12 @@ This will return the props required to hook up a standard `<input />` field, pro
 <input {...g.input("example")} />
 ```
 
-Specifying `true` to the `checkbox` parameter will slightly modify the value props passed back by this method - `checked` will be used rather than `value`
+`checkbox: (key: string)`
+
+This works the same as `input()` but manages the `checked` property rather than `value`.
 
 ```jsx
-<input {...g.input("example", true)} />
+<input {...g.checkbox("example")} />
 ```
 
 ---
