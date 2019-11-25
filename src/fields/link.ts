@@ -1,21 +1,21 @@
 import { Operations, buildOps } from ".";
 
-export type LinkField = {
+export type LinkField<T> = {
   onChange: (newValue: any) => void;
   initialValue: any;
-  value: any;
+  value: T;
 } & Operations;
 
-export type RenderLinkField = (l: LinkField) => any;
+export type RenderLinkField<T> = (l: LinkField<T>) => any;
 
-export const link = (
+export const link = <T>(
   key: string,
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  render: RenderLinkField
+  render: RenderLinkField<T>
 ) => {
-  const l: LinkField = {
+  const l: LinkField<T> = {
     onChange: (newValue: any) => onChange(key, newValue),
     value,
     initialValue,

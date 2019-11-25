@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 
-export type SelectProps = {
-  value?: any;
-  onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => void;
-  children: any[];
+export type SelectProps = React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLSelectElement>,
+  HTMLSelectElement
+>;
+
+export type SelectOptions<T> = {
+  list?: T[];
+  listAsync?: () => Promise<T[]>;
+  valueKey: (item: T) => string;
+  displayKey: (item: T) => string;
 };
 
-export type SelectOptions = {
-  list?: any[];
-  listAsync?: () => Promise<any[]>;
-  valueKey: string;
-  displayKey: string;
-};
-
-export const select = (
+export const select = <T>(
   key: string,
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  options: SelectOptions
+  options: SelectOptions<T>
 ): SelectProps => {
   const [list, setList] = useState<any[]>([]);
 
@@ -35,8 +34,8 @@ export const select = (
     children: list.map((ent: any, index: number) =>
       React.createElement("option", {
         key: index,
-        value: ent[options.valueKey],
-        children: ent[options.displayKey]
+        value: options.valueKey(ent),
+        children: options.displayKey(ent)
       })
     )
   };

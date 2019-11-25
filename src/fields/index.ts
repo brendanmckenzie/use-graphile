@@ -10,9 +10,9 @@ export type Operations = {
   input: (key: string) => InputProps;
   checkbox: (key: string) => InputProps;
   textarea: (key: string) => TextAreaProps;
-  link: (key: string, render: RenderLinkField) => any;
-  multi: (key: string, render: RenderMultiField) => any;
-  select: (key: string, options: SelectOptions) => any;
+  link: <T = any>(key: string, render: RenderLinkField<T>) => any;
+  multi: <T = any>(key: string, render: RenderMultiField<T>) => any;
+  select: <T = any>(key: string, options: SelectOptions<T>) => any;
 };
 
 export const buildOps = (
@@ -31,12 +31,24 @@ export const buildOps = (
       checkbox(key, safeValues[key], safeInitialValues[key], handleChange),
     textarea: (key: string): TextAreaProps =>
       textarea(key, safeValues[key], safeInitialValues[key], handleChange),
-    link: (key: string, render: RenderLinkField) =>
-      link(key, safeValues[key], safeInitialValues[key], handleChange, render),
-    multi: (key: string, render: RenderMultiField) =>
-      multi(key, safeValues[key], safeInitialValues[key], handleChange, render),
-    select: (key: string, options: SelectOptions) =>
-      select(
+    link: <T = any>(key: string, render: RenderLinkField<T>) =>
+      link<T>(
+        key,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange,
+        render
+      ),
+    multi: <T = any>(key: string, render: RenderMultiField<T>) =>
+      multi<T>(
+        key,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange,
+        render
+      ),
+    select: <T = any>(key: string, options: SelectOptions<T>) =>
+      select<T>(
         key,
         safeValues[key],
         safeInitialValues[key],

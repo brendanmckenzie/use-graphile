@@ -37,7 +37,7 @@ This would instantiate our hook, letting it know we are working with the `custom
 
 Once the hook is instantiated, the following methods are available (following the above example, these methods would be accessible on the `g` object).
 
-`input: (key: string)`
+`input(key: string)`
 
 This will return the props required to hook up a standard `<input />` field, providing the input with its current value as well as an `onChange` method.
 
@@ -45,7 +45,7 @@ This will return the props required to hook up a standard `<input />` field, pro
 <input {...g.input("example")} />
 ```
 
-`checkbox: (key: string)`
+`checkbox(key: string)`
 
 This works the same as `input()` but manages the `checked` property rather than `value`.
 
@@ -55,7 +55,7 @@ This works the same as `input()` but manages the `checked` property rather than 
 
 ---
 
-`textarea: (key: string)`
+`textarea(key: string)`
 
 This works exactly the same as `input()` but is specifically for `<textarea />` fields.
 
@@ -65,7 +65,7 @@ This works exactly the same as `input()` but is specifically for `<textarea />` 
 
 ---
 
-`link: (key: string, render: RenderLinkField)`
+`link<T = any>(key: string, render: RenderLinkField)`
 
 This provides you with an interface for dealing with linked entities, in the example model, if you were targetting the `trip` model this would provide you with a simple interface for editing the customer.
 
@@ -88,7 +88,7 @@ g.link("customer", cust => (
 
 ---
 
-`multi: (key: string, render: RenderMultiField)`
+`multi<T = any>(key: string, render: RenderMultiField)`
 
 Similar to the `link` method, `multi` allows you to reference collection properties.
 
@@ -107,7 +107,7 @@ g.multi("trips", trips => (
 
 ---
 
-`select: (key: string, options: SelectOptions)`
+`select<TOption = any>(key: string, options: SelectOptions)`
 
 This provides you with a helper method when working with `<select />` fields.
 
@@ -117,8 +117,8 @@ const selectConfig: SelectOptions = {
     { id: 0, name: "A" },
     { id: 1, name: "B" },
   ],
-  valueKey: 'id',
-  displayKey: 'name'
+  valueKey: (opt: any) => opt.id,
+  displayKey: (opt: any) => opt.name
 }
 
 <select {...g.select("trips", selectConfig)} />
@@ -133,8 +133,8 @@ const selectConfig: SelectOptions = {
 
     return options;
   },
-  valueKey: 'id',
-  displayKey: 'name'
+  valueKey: (opt: any) => opt.id,
+  displayKey: (opt: any) => opt.name
 }
 
 <select {...g.select("trips", selectConfig)} />
@@ -142,16 +142,18 @@ const selectConfig: SelectOptions = {
 
 ### Model configuration
 
-The purpose of the model configuration is to inform the patching process of how to link entities.
-
-With that in mind, you do not need to explicitly declare all fields available in your model. You simply need to define the links between entities.
+The purpose of the model configuration is to inform the patching process of what fields are tracked and how to link entities.
 
 This is an acceptable model configuration.
 
 ```ts
 export const model: Model = {
-  customer: {},
-  quote: {},
+  customer: {
+    name: { type: "string" }
+  },
+  quote: {
+    summary: { type: "string" }
+  },
   trip: {
     customer: {
       type: "customer",

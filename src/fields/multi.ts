@@ -2,35 +2,35 @@ import React from "react";
 import { buildOps, Operations } from ".";
 import { sorted } from "../util";
 
-export type MultiFieldItem = {
+export type MultiFieldItem<T> = {
   remove: () => void;
-  item: any;
+  item: T;
 } & Operations;
 
-export type MultiField = {
+export type MultiField<T> = {
   items: any[];
   add: () => void;
   reset: () => void;
   renderItems: (
-    render: (i: MultiFieldItem) => any,
+    render: (i: MultiFieldItem<T>) => any,
     sortBy: string | null
   ) => any;
 };
 
-export type RenderMultiField = (m: MultiField) => any;
+export type RenderMultiField<T> = (m: MultiField<T>) => any;
 
-export const multi = (
+export const multi = <T>(
   key: string,
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  render: RenderMultiField
+  render: RenderMultiField<T>
 ) => {
   // for multi-link fields
   const items = (value || {}).nodes || [];
   const initialItems = (initialValue || {}).nodes || [];
 
-  const m: MultiField = {
+  const m: MultiField<T> = {
     items,
     add: () => {
       onChange(key, { nodes: [...items, {}] });
@@ -39,7 +39,7 @@ export const multi = (
       onChange(key, initialValue);
     },
     renderItems: (
-      render: (i: MultiFieldItem) => any,
+      render: (i: MultiFieldItem<T>) => any,
       sortBy: string | null = null
     ) => {
       let sortedItems = sorted(items, sortBy);
@@ -59,7 +59,7 @@ export const multi = (
             })
           });
         };
-        const i: MultiFieldItem = {
+        const i: MultiFieldItem<T> = {
           item,
           remove: () => {
             onChange(key, {
