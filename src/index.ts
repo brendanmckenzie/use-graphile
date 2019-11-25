@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import isEqual from "lodash.isequal";
 import { buildPatch } from "./patch/patch";
 import { Operations, buildOps } from "./fields";
 import { Model } from "./model";
 
 export type Model = Model;
 
-type Graphile = {
+export type Graphile = {
   values: any;
   buildPatch: () => any;
   clean: boolean;
@@ -28,7 +29,7 @@ const useGraphile = (
   const g: Graphile = {
     values,
     buildPatch: () => buildPatch(model, rootType, initialValues, values),
-    clean: initialValues != values,
+    clean: isEqual(initialValues, values),
     ...buildOps(values, initialValues, setValues, handleChange)
   };
 

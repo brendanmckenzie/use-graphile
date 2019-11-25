@@ -1,6 +1,6 @@
 import { patchMulti } from "./patchMulti";
 import { patchLink } from "./patchLink";
-import { Model } from "../model";
+import { Model, FieldDef } from "../model";
 
 const parseValue = (type: string, value: any) => {
   switch (type) {
@@ -19,18 +19,31 @@ export const buildPatch = (
   newValues: any
 ): any => {
   const typeDef = config[type];
+  if (!typeDef) {
+    console.warn(`Unknown type: '${type}`);
+    return {};
+  }
   const fields = Object.keys(typeDef);
   return fields.reduce((p: any, key) => {
     const fieldDef = typeDef[key];
     const originalVal = originalValues[key];
     const newVal = newValues[key];
 
-    if (fieldDef.type && fieldDef.multi) {
+    const type = typeof fieldDef === "string" ? fieldDef : fieldDef.type;
+    const multi = typeof fieldDef === "string" ? false : fieldDef.multi;
+
+    if (type && multi) {
       // link multi field
-      return { ...p, ...patchMulti(config, fieldDef, originalVal, newVal) };
-    } else if (typeDef[fieldDef.type]) {
+      return {
+        ...p,
+        ...patchMulti(config, fieldDef as FieldDef, originalVal, newVal)
+      };
+    } else if (typeDef[type]) {
       // link field
-      return { ...p, ...patchLink(config, fieldDef, originalVal, newVal) };
+      return {
+        ...p,
+        ...patchLink(config, fieldDef as FieldDef, originalVal, newVal)
+      };
     } else {
       // standard field
       if (originalValues[key] === newValues[key]) {
@@ -39,7 +52,7 @@ export const buildPatch = (
         if (newValues[key] || originalValues[key]) {
           return {
             ...p,
-            [key]: parseValue(fieldDef.type, newValues[key])
+            [key]: parseValue(type, newValues[key])
           };
         }
       }

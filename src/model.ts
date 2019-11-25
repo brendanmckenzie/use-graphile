@@ -4,4 +4,6 @@ export type FieldDef = {
   patchProperty?: string;
 };
 
-export type Model = { [typeKey: string]: { [fieldKey: string]: FieldDef } };
+export type Model = {
+  [typeKey: string]: { [fieldKey: string]: FieldDef | string };
+};
