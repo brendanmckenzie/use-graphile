@@ -13,6 +13,7 @@ export type Operations = {
   link: <T = any>(key: string, render: RenderLinkField<T>) => any;
   multi: <T = any>(key: string, render: RenderMultiField<T>) => any;
   select: <T = any>(key: string, options: SelectOptions<T>) => any;
+  display: (key: string) => any;
 };
 
 export const buildOps = (
@@ -25,6 +26,7 @@ export const buildOps = (
   const safeInitialValues = initialValues || {};
   return {
     reset: () => setValues(initialValues),
+    display: (key: string): any => safeValues[key],
     input: (key: string): InputProps =>
       input(key, safeValues[key], safeInitialValues[key], handleChange),
     checkbox: (key: string): InputProps =>
