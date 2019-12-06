@@ -1,31 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export type SelectProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLSelectElement>,
   HTMLSelectElement
 >;
 
-export type SelectOptions<T> = {
-  list?: T[];
-  listAsync?: () => Promise<T[]>;
-  valueKey: (item: T) => string;
-  displayKey: (item: T) => string;
+export type SelectOptions<T, TOption = any> = {
+  list?: TOption[];
+  listAsync?: () => Promise<TOption[]>;
+  valueKey: (item: TOption) => any;
+  displayKey: (item: TOption) => string;
 };
 
-export const select = <T>(
+export const select = <T, TOption = any>(
   key: string,
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  options: SelectOptions<T>
+  options: SelectOptions<T, TOption>
 ): SelectProps => {
   const [list, setList] = useState<any[]>([]);
 
-  if (options.list) {
-    setList(options.list);
-  } else if (options.listAsync) {
-    options.listAsync().then(setList);
-  }
+  useEffect(() => {
+    if (options.list) {
+      setList(options.list);
+    } else if (options.listAsync) {
+      options.listAsync().then(setList);
+    }
+  }, [options.list, options.listAsync]);
 
   return {
     value: value || "",

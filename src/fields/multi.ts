@@ -5,7 +5,7 @@ import { sorted } from "../util";
 export type MultiFieldItem<T> = {
   remove: () => void;
   item: T;
-} & Operations;
+} & Operations<T>;
 
 export type MultiField<T> = {
   items: any[];
@@ -66,7 +66,7 @@ export const multi = <T>(
               nodes: sortedItems.filter((_: any, i: number) => i !== index)
             });
           },
-          ...buildOps(
+          ...buildOps<T>(
             sortedItems[index],
             sortedInitialItems[index],
             values =>

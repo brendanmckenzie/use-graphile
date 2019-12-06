@@ -4,7 +4,7 @@ export type LinkField<T> = {
   onChange: (newValue: any) => void;
   initialValue: any;
   value: T;
-} & Operations;
+} & Operations<T>;
 
 export type RenderLinkField<T> = (l: LinkField<T>) => any;
 
@@ -19,7 +19,7 @@ export const link = <T>(
     onChange: (newValue: any) => onChange(key, newValue),
     value,
     initialValue,
-    ...buildOps(
+    ...buildOps<T>(
       value,
       initialValue,
       values => onChange(key, values),

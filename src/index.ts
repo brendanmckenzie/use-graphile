@@ -6,31 +6,29 @@ import { Model } from "./model";
 
 export type Model = Model;
 
-export type Graphile = {
-  values: any;
+export type Graphile<T> = {
+  values: T;
   buildPatch: () => any;
   clean: boolean;
-} & Operations;
+} & Operations<T>;
 
-const useGraphile = (
+const useGraphile = <T = any>(
   model: Model,
   rootType: string,
-  initialValues: any = {}
+  initialValues: T
 ) => {
-  const [values, setValues] = useState<any>(initialValues);
+  const [values, setValues] = useState<T>(initialValues);
 
-  useEffect(() => {
-    setValues(initialValues);
-  }, [initialValues]);
+  useEffect(() => setValues(initialValues), [JSON.stringify(initialValues)]);
 
   const handleChange = (key: string, value: any) =>
     setValues({ ...values, [key]: value });
 
-  const g: Graphile = {
+  const g: Graphile<T> = {
     values,
     buildPatch: () => buildPatch(model, rootType, initialValues, values),
     clean: isEqual(initialValues, values),
-    ...buildOps(values, initialValues, setValues, handleChange)
+    ...buildOps<T>(values, initialValues, setValues, handleChange)
   };
 
   return g;

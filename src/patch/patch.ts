@@ -24,6 +24,7 @@ export const buildPatch = (
     return {};
   }
   const fields = Object.keys(typeDef);
+
   return fields.reduce((p: any, key) => {
     const fieldDef = typeDef[key];
     const originalVal = originalValues[key];
@@ -38,7 +39,7 @@ export const buildPatch = (
         ...p,
         ...patchMulti(config, fieldDef as FieldDef, originalVal, newVal)
       };
-    } else if (typeDef[type]) {
+    } else if (config[type]) {
       // link field
       return {
         ...p,

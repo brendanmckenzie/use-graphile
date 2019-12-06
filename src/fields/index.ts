@@ -5,57 +5,80 @@ import { multi, RenderMultiField } from "./multi";
 import { select, SelectOptions } from "./select";
 import { checkbox } from "./checkbox";
 
-export type Operations = {
+export interface Operations<T = any> {
   reset: () => void;
-  input: (key: string) => InputProps;
-  checkbox: (key: string) => InputProps;
-  textarea: (key: string) => TextAreaProps;
-  link: <T = any>(key: string, render: RenderLinkField<T>) => any;
-  multi: <T = any>(key: string, render: RenderMultiField<T>) => any;
-  select: <T = any>(key: string, options: SelectOptions<T>) => any;
-  display: (key: string) => any;
-};
+  set: (values: any) => void;
+  input: (key: keyof T) => InputProps;
+  checkbox: (key: keyof T) => InputProps;
+  textarea: (key: keyof T) => TextAreaProps;
+  link: <TEntity = any>(key: keyof T, render: RenderLinkField<TEntity>) => any;
+  multi: <TEntity = any>(
+    key: keyof T,
+    render: RenderMultiField<TEntity>
+  ) => any;
+  select: <TOption = any>(
+    key: keyof T,
+    options: SelectOptions<T, TOption>
+  ) => any;
+  display: (key: keyof T) => any;
+}
 
-export const buildOps = (
-  values: any,
-  initialValues: any,
-  setValues: (values: any) => void,
+export const buildOps = <T = any>(
+  values: T,
+  initialValues: T,
+  setValues: (values: T) => void,
   handleChange: (key: string, value: any) => void
-): Operations => {
-  const safeValues = values || {};
-  const safeInitialValues = initialValues || {};
+): Operations<T> => {
+  const safeValues = values || ({} as T);
+  const safeInitialValues = initialValues || ({} as T);
   return {
     reset: () => setValues(initialValues),
-    display: (key: string): any => safeValues[key],
-    input: (key: string): InputProps =>
-      input(key, safeValues[key], safeInitialValues[key], handleChange),
-    checkbox: (key: string): InputProps =>
-      checkbox(key, safeValues[key], safeInitialValues[key], handleChange),
-    textarea: (key: string): TextAreaProps =>
-      textarea(key, safeValues[key], safeInitialValues[key], handleChange),
-    link: <T = any>(key: string, render: RenderLinkField<T>) =>
-      link<T>(
-        key,
+    set: (values: any) => setValues(values),
+    display: (key: keyof T): any => safeValues[key],
+    input: (key: keyof T): InputProps =>
+      input(
+        key as string,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange
+      ),
+    checkbox: (key: keyof T): InputProps =>
+      checkbox(
+        key as string,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange
+      ),
+    textarea: (key: keyof T): TextAreaProps =>
+      textarea(
+        key as string,
+        safeValues[key],
+        safeInitialValues[key],
+        handleChange
+      ),
+    link: <TEntity = any>(key: keyof T, render: RenderLinkField<TEntity>) =>
+      link<TEntity>(
+        key as string,
         safeValues[key],
         safeInitialValues[key],
         handleChange,
         render
       ),
-    multi: <T = any>(key: string, render: RenderMultiField<T>) =>
-      multi<T>(
-        key,
+    multi: <TEntity = any>(key: keyof T, render: RenderMultiField<TEntity>) =>
+      multi<TEntity>(
+        key as string,
         safeValues[key],
         safeInitialValues[key],
         handleChange,
         render
       ),
-    select: <T = any>(key: string, options: SelectOptions<T>) =>
-      select<T>(
-        key,
+    select: <TOption = any>(key: keyof T, options: SelectOptions<TOption>) =>
+      select<T, TOption>(
+        key as string,
         safeValues[key],
         safeInitialValues[key],
         handleChange,
         options
       )
-  };
+  } as Operations<T>;
 };
