@@ -5,6 +5,7 @@ import { sorted } from "../util";
 export type MultiFieldItem<T> = {
   remove: () => void;
   item: T;
+  index: number;
 } & Operations<T>;
 
 export type MultiField<T> = {
@@ -27,7 +28,7 @@ export const multi = <T>(
   render: RenderMultiField<T>
 ) => {
   // for multi-link fields
-  const items = (value || {}).nodes || [];
+  const items: T[] = (value || {}).nodes || [];
   const initialItems = (initialValue || {}).nodes || [];
 
   const m: MultiField<T> = {
@@ -48,7 +49,7 @@ export const multi = <T>(
       return sortedItems.map((item: any, index: number) => {
         const handleChange = (itemKey: string, itemValue: any) => {
           onChange(key, {
-            nodes: sortedItems.map((ent: any, i: number) => {
+            nodes: sortedItems.map((ent, i) => {
               if (i === index) {
                 return {
                   ...ent,
@@ -60,10 +61,11 @@ export const multi = <T>(
           });
         };
         const i: MultiFieldItem<T> = {
+          index,
           item,
           remove: () => {
             onChange(key, {
-              nodes: sortedItems.filter((_: any, i: number) => i !== index)
+              nodes: sortedItems.filter((_, i) => i !== index)
             });
           },
           ...buildOps<T>(
@@ -71,7 +73,7 @@ export const multi = <T>(
             sortedInitialItems[index],
             values =>
               onChange(key, {
-                nodes: sortedItems.map((ent: any, i: number) =>
+                nodes: sortedItems.map((ent, i) =>
                   i === index ? values || {} : ent
                 )
               }),
