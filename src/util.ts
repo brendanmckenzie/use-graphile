@@ -1,4 +1,4 @@
-export const sorted = (input: any[], sortBy: string | null): any[] => {
+export const sorted = <T = any>(input: T[], sortBy: string | null): T[] => {
   if (sortBy) {
     const [field, direction] = sortBy.split(" ");
     let sortedItems = (input as Array<any>).sort((a, b) => {

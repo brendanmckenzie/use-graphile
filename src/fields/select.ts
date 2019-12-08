@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 export type SelectProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLSelectElement>,
@@ -6,10 +6,9 @@ export type SelectProps = React.DetailedHTMLProps<
 >;
 
 export type SelectOptions<T, TOption = any> = {
-  list?: TOption[];
-  listAsync?: () => Promise<TOption[]>;
-  valueKey: (item: TOption) => any;
-  displayKey: (item: TOption) => string;
+  list: TOption[];
+  valueKey?: (item: TOption) => any;
+  displayKey?: (item: TOption) => string;
 };
 
 export const select = <T, TOption = any>(
@@ -19,25 +18,15 @@ export const select = <T, TOption = any>(
   onChange: (key: string, value: any) => void,
   options: SelectOptions<T, TOption>
 ): SelectProps => {
-  const [list, setList] = useState<any[]>([]);
-
-  useEffect(() => {
-    if (options.list) {
-      setList(options.list);
-    } else if (options.listAsync) {
-      options.listAsync().then(setList);
-    }
-  }, [options.list, options.listAsync]);
-
   return {
     value: value || "",
     onChange: (ev: React.ChangeEvent<HTMLSelectElement>) =>
       onChange(key, ev.currentTarget.value),
-    children: list.map((ent: any, index: number) =>
+    children: options.list.map((ent: any, index: number) =>
       React.createElement("option", {
         key: index,
-        value: options.valueKey(ent),
-        children: options.displayKey(ent)
+        value: options.valueKey ? options.valueKey(ent) : ent,
+        children: options.displayKey ? options.displayKey(ent) : ent
       })
     )
   };
