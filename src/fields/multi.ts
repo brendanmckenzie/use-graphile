@@ -12,10 +12,11 @@ export type MultiField<T> = {
   items: any[];
   add: () => void;
   reset: () => void;
-  renderItems: (
-    render: (i: MultiFieldItem<T>) => any,
-    sortBy: string | null
-  ) => any;
+  renderItems: (render: (i: MultiFieldItem<T>) => any, sortBy?: string) => any;
+};
+
+export type MultiFieldOptions<T> = {
+  populateNewItem?: (items: T[]) => T;
 };
 
 export type RenderMultiField<T> = (m: MultiField<T>) => any;
@@ -25,7 +26,8 @@ export const multi = <T>(
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  render: RenderMultiField<T>
+  render: RenderMultiField<T>,
+  options?: MultiFieldOptions<T>
 ) => {
   // for multi-link fields
   const items: T[] = (value || {}).nodes || [];
@@ -34,7 +36,11 @@ export const multi = <T>(
   const m: MultiField<T> = {
     items,
     add: () => {
-      onChange(key, { nodes: [...items, {}] });
+      if (options && options.populateNewItem) {
+        onChange(key, { nodes: [...items, options.populateNewItem(items)] });
+      } else {
+        onChange(key, { nodes: [...items, {}] });
+      }
     },
     reset: () => {
       onChange(key, initialValue);
@@ -43,8 +49,8 @@ export const multi = <T>(
       render: (i: MultiFieldItem<T>) => any,
       sortBy: string | null = null
     ) => {
-      let sortedItems = sorted(items, sortBy);
-      let sortedInitialItems = sorted(initialItems, sortBy);
+      const sortedItems = sorted(items, sortBy);
+      const sortedInitialItems = sorted(initialItems, sortBy);
 
       return sortedItems.map((item: any, index: number) => {
         const handleChange = (itemKey: string, itemValue: any) => {

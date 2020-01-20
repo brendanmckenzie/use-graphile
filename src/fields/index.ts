@@ -1,8 +1,8 @@
 import { input, InputProps } from "./input";
 import { textarea, TextAreaProps } from "./textarea";
 import { link, RenderLinkField } from "./link";
-import { multi, RenderMultiField } from "./multi";
-import { select, SelectOptions } from "./select";
+import { multi, RenderMultiField, MultiFieldOptions } from "./multi";
+import { select, SelectOptions, SelectProps } from "./select";
 import { checkbox } from "./checkbox";
 
 export interface Operations<T = any> {
@@ -14,12 +14,13 @@ export interface Operations<T = any> {
   link: <TEntity = any>(key: keyof T, render: RenderLinkField<TEntity>) => any;
   multi: <TEntity = any>(
     key: keyof T,
-    render: RenderMultiField<TEntity>
+    render: RenderMultiField<TEntity>,
+    options?: MultiFieldOptions<TEntity>
   ) => any;
   select: <TOption = any>(
     key: keyof T,
-    options: SelectOptions<T, TOption>
-  ) => any;
+    options: SelectOptions<TOption>
+  ) => SelectProps;
   display: (key: keyof T) => any;
 }
 
@@ -64,16 +65,21 @@ export const buildOps = <T = any>(
         handleChange,
         render
       ),
-    multi: <TEntity = any>(key: keyof T, render: RenderMultiField<TEntity>) =>
+    multi: <TEntity = any>(
+      key: keyof T,
+      render: RenderMultiField<TEntity>,
+      options?: MultiFieldOptions<TEntity>
+    ) =>
       multi<TEntity>(
         key as string,
         safeValues[key],
         safeInitialValues[key],
         handleChange,
-        render
+        render,
+        options
       ),
     select: <TOption = any>(key: keyof T, options: SelectOptions<TOption>) =>
-      select<T, TOption>(
+      select<TOption>(
         key as string,
         safeValues[key],
         safeInitialValues[key],

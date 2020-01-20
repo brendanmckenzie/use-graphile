@@ -5,23 +5,30 @@ export type SelectProps = React.DetailedHTMLProps<
   HTMLSelectElement
 >;
 
-export type SelectOptions<T, TOption = any> = {
+export type SelectOptions<TOption = any> = {
   list: TOption[];
   valueKey?: (item: TOption) => any;
   displayKey?: (item: TOption) => string;
+  translate?: (value: string) => any;
 };
 
-export const select = <T, TOption = any>(
+const defaultTranslate = (value: string) => value;
+
+export const select = <TOption = any>(
   key: string,
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  options: SelectOptions<T, TOption>
+  options: SelectOptions<TOption>
 ): SelectProps => {
   return {
     value: value || "",
-    onChange: (ev: React.ChangeEvent<HTMLSelectElement>) =>
-      onChange(key, ev.currentTarget.value),
+    onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = (options.translate || defaultTranslate)(
+        ev.currentTarget.value
+      );
+      onChange(key, value ? value : null);
+    },
     children: options.list.map((ent: any, index: number) =>
       React.createElement("option", {
         key: index,
