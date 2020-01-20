@@ -18,11 +18,17 @@ export const patchLink = (
     if (Object.keys(patch).length === 0) {
       return {};
     } else {
+      if (fieldDef.linkedObject) {
+        const { __typename, ...val } = newVal;
+        return {
+          [fieldDef.patchProperty]: val
+        };
+      }
       return {
         [fieldDef.patchProperty]: {
           updateById: {
             id: newVal.id,
-            patch: buildPatch(config, fieldDef.type, originalVal, newVal)
+            patch
           }
         }
       };
@@ -56,6 +62,11 @@ export const patchLink = (
         }
       };
     } else {
+      if (fieldDef.linkedObject) {
+        return {
+          [fieldDef.patchProperty]: newVal
+        };
+      }
       // create
       return {
         [fieldDef.patchProperty]: {
