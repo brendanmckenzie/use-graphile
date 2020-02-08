@@ -3,8 +3,7 @@ import isEqual from "lodash.isequal";
 import { buildPatch } from "./patch/patch";
 import { Operations, buildOps } from "./fields";
 import { Model } from "./model";
-
-export type Model = Model;
+export { Model } from "./model";
 
 export type Graphile<T> = {
   values: T;

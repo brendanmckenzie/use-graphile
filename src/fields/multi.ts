@@ -9,7 +9,7 @@ export type MultiFieldItem<T> = {
 } & Operations<T>;
 
 export type MultiField<T> = {
-  items: any[];
+  items: T[];
   add: () => void;
   reset: () => void;
   renderItems: (render: (i: MultiFieldItem<T>) => any, sortBy?: string) => any;

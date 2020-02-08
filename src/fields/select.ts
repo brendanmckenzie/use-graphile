@@ -6,10 +6,11 @@ export type SelectProps = React.DetailedHTMLProps<
 >;
 
 export type SelectOptions<TOption = any> = {
-  list: TOption[];
+  list?: TOption[];
   valueKey?: (item: TOption) => any;
   displayKey?: (item: TOption) => string;
   translate?: (value: string) => any;
+  includeEmpty?: boolean;
 };
 
 const defaultTranslate = (value: string) => value;
@@ -19,22 +20,33 @@ export const select = <TOption = any>(
   value: any,
   initialValue: any,
   onChange: (key: string, value: any) => void,
-  options: SelectOptions<TOption>
+  options?: SelectOptions<TOption>
 ): SelectProps => {
   return {
     value: value || "",
     onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => {
-      const value = (options.translate || defaultTranslate)(
+      const value = (options?.translate || defaultTranslate)(
         ev.currentTarget.value
       );
       onChange(key, value ? value : null);
     },
-    children: options.list.map((ent: any, index: number) =>
-      React.createElement("option", {
-        key: index,
-        value: options.valueKey ? options.valueKey(ent) : ent,
-        children: options.displayKey ? options.displayKey(ent) : ent
-      })
+    children: (options?.includeEmpty
+      ? [
+          React.createElement("option", {
+            key: -1,
+            value: "(select)",
+            children: null
+          })
+        ]
+      : []
+    ).concat(
+      (options?.list ?? []).map((ent: any, index: number) =>
+        React.createElement("option", {
+          key: index,
+          value: options?.valueKey ? options.valueKey(ent) : ent,
+          children: options?.displayKey ? options.displayKey(ent) : ent
+        })
+      )
     )
   };
 };

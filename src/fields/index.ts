@@ -19,7 +19,7 @@ export interface Operations<T = any> {
   ) => any;
   select: <TOption = any>(
     key: keyof T,
-    options: SelectOptions<TOption>
+    options?: SelectOptions<TOption>
   ) => SelectProps;
   display: (key: keyof T) => any;
 }
@@ -78,7 +78,7 @@ export const buildOps = <T = any>(
         render,
         options
       ),
-    select: <TOption = any>(key: keyof T, options: SelectOptions<TOption>) =>
+    select: <TOption = any>(key: keyof T, options?: SelectOptions<TOption>) =>
       select<TOption>(
         key as string,
         safeValues[key],
