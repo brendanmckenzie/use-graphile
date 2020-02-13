@@ -7,7 +7,7 @@ import { checkbox } from "./checkbox";
 
 export interface Operations<T = any> {
   reset: () => void;
-  set: (values: any) => void;
+  set: (values: T) => void;
   input: (key: keyof T) => InputProps;
   checkbox: (key: keyof T) => InputProps;
   textarea: (key: keyof T) => TextAreaProps;

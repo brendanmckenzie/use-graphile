@@ -12,6 +12,7 @@ export type MultiField<T> = {
   items: T[];
   add: () => void;
   reset: () => void;
+  set: (value: T[]) => void;
   renderItems: (render: (i: MultiFieldItem<T>) => any, sortBy?: string) => any;
 };
 
@@ -44,6 +45,9 @@ export const multi = <T>(
     },
     reset: () => {
       onChange(key, initialValue);
+    },
+    set: (value: T[]) => {
+      onChange(key, { nodes: value });
     },
     renderItems: (
       render: (i: MultiFieldItem<T>) => any,
