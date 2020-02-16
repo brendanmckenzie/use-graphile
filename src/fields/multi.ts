@@ -43,12 +43,8 @@ export const multi = <T>(
         onChange(key, { nodes: [...items, {}] });
       }
     },
-    reset: () => {
-      onChange(key, initialValue);
-    },
-    set: (value: T[]) => {
-      onChange(key, { nodes: value });
-    },
+    reset: () => onChange(key, initialValue),
+    set: (value: T[]) => onChange(key, { nodes: value }),
     renderItems: (
       render: (i: MultiFieldItem<T>) => any,
       sortBy: string | null = null

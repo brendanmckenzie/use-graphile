@@ -35,6 +35,11 @@ export const patchLink = (
     }
   } else if (originalVal && newVal && originalVal.id !== newVal.id) {
     // connectById
+    if (fieldDef.patchWorkaroundProperty) {
+      return {
+        [fieldDef.patchWorkaroundProperty]: newVal.id
+      };
+    }
     return {
       [fieldDef.patchProperty]: {
         connectById: {
@@ -54,6 +59,11 @@ export const patchLink = (
   } else if (!originalVal && newVal) {
     if (newVal.id) {
       // connectById
+      if (fieldDef.patchWorkaroundProperty) {
+        return {
+          [fieldDef.patchWorkaroundProperty]: newVal.id
+        };
+      }
       return {
         [fieldDef.patchProperty]: {
           connectById: {

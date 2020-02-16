@@ -3,6 +3,7 @@ export type FieldDef = {
   multi?: boolean;
   patchProperty?: string;
   linkedObject?: boolean;
+  patchWorkaroundProperty?: string; // See: https://github.com/mlipscombe/postgraphile-plugin-nested-mutations/issues/29
 };
 
 export type Model = {
