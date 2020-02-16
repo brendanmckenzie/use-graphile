@@ -49,7 +49,12 @@ export const patchLink = (
     };
   } else if (originalVal && !newVal) {
     // deleteById
-    return {
+    if (fieldDef.patchWorkaroundProperty) {
+      return {
+        [fieldDef.patchWorkaroundProperty]: null
+      };
+    }
+  return {
       [fieldDef.patchProperty]: {
         deleteById: {
           id: originalVal.id
