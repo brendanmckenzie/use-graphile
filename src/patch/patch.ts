@@ -6,9 +6,10 @@ const parseValue = (type: string, value: any) => {
   switch (type) {
     case "number":
       return parseFloat(value);
+    case "date":
     case "string":
     default:
-      return value;
+      return value ? value : null;
   }
 };
 
