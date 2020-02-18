@@ -6,6 +6,8 @@ const parseValue = (type: string, value: any) => {
   switch (type) {
     case "number":
       return parseFloat(value);
+    case "string[]":
+      return (value || "").split(",").filter((a: any) => !!a);
     case "date":
     case "string":
     default:

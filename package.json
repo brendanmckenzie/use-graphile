@@ -1,6 +1,6 @@
 {
   "name": "use-graphile",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
