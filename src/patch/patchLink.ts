@@ -54,7 +54,7 @@ export const patchLink = (
         [fieldDef.patchWorkaroundProperty]: null
       };
     }
-  return {
+    return {
       [fieldDef.patchProperty]: {
         deleteById: {
           id: originalVal.id

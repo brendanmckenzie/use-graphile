@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import isEqual from "lodash.isequal";
 import { buildPatch } from "./patch/patch";
 import { Operations, buildOps } from "./fields";
 import { Model } from "./model";
@@ -26,7 +25,7 @@ const useGraphile = <T = any>(
   const g: Graphile<T> = {
     values,
     buildPatch: () => buildPatch(model, rootType, initialValues, values),
-    clean: isEqual(initialValues, values),
+    clean: JSON.stringify(initialValues) === JSON.stringify(values),
     ...buildOps<T>(values, initialValues, setValues, handleChange)
   };
 
