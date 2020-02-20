@@ -3,8 +3,13 @@ import { patchLink } from "./patchLink";
 import { Model, FieldDef } from "../model";
 
 const parseValue = (type: string, value: any) => {
+  console.log("type", type);
+  console.log("value", value);
   switch (type) {
     case "number":
+      if (typeof value === "number") {
+        return value;
+      }
       return parseFloat(value);
     case "string[]":
       return (value || "").split(",").filter((a: any) => !!a);
@@ -53,7 +58,7 @@ export const buildPatch = (
       if (originalValues[key] === newValues[key]) {
         return p;
       } else {
-        if (newValues[key] || originalValues[key]) {
+        if (newValues[key] !== undefined || originalValues[key]) {
           return {
             ...p,
             [key]: parseValue(type, newValues[key])
