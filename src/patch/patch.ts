@@ -3,8 +3,6 @@ import { patchLink } from "./patchLink";
 import { Model, FieldDef } from "../model";
 
 const parseValue = (type: string, value: any) => {
-  console.log("type", type);
-  console.log("value", value);
   switch (type) {
     case "number":
       if (typeof value === "number") {
