@@ -88,7 +88,7 @@ export const multi = <T>(
         };
 
         return React.createElement(React.Fragment, {
-          key: index,
+          key: item.id || index,
           children: render(i)
         });
       });
