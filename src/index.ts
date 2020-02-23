@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { buildPatch } from "./patch/patch";
 import { Operations, buildOps } from "./fields";
 import { Model } from "./model";
+
 export { Model } from "./model";
+export { buildPatch } from "./patch/patch";
 
 export type Graphile<T> = {
   values: T;
