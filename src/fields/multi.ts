@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { buildOps, Operations } from ".";
 import { sorted } from "../util";
 

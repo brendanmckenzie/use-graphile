@@ -4,12 +4,14 @@ import { link, RenderLinkField } from "./link";
 import { multi, RenderMultiField, MultiFieldOptions } from "./multi";
 import { select, SelectOptions, SelectProps } from "./select";
 import { checkbox } from "./checkbox";
+import { radio } from "./radio";
 
 export interface Operations<T = any> {
   reset: () => void;
   set: (values: T) => void;
   input: (key: keyof T) => InputProps;
   checkbox: (key: keyof T) => InputProps;
+  radio: (key: keyof T, itemValue: any) => InputProps;
   textarea: (key: keyof T) => TextAreaProps;
   link: <TEntity = any>(key: keyof T, render: RenderLinkField<TEntity>) => any;
   multi: <TEntity = any>(
@@ -50,6 +52,14 @@ export const buildOps = <T = any>(
         safeInitialValues[key],
         handleChange
       ),
+    radio: (key: keyof T, itemValue: any): InputProps =>
+      radio(
+        key as string,
+        safeValues[key],
+        itemValue,
+        safeInitialValues[key],
+        handleChange
+      ),
     textarea: (key: keyof T): TextAreaProps =>
       textarea(
         key as string,
@@ -85,6 +95,6 @@ export const buildOps = <T = any>(
         safeInitialValues[key],
         handleChange,
         options
-      )
+      ),
   } as Operations<T>;
 };

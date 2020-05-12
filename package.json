@@ -8,11 +8,11 @@
     "dev": "tsc --watch"
   },
   "peerDependencies": {
-    "react": "^16.12.0"
+    "react": "^16.13.1"
   },
   "devDependencies": {
-    "@types/react": "^16.9.11",
-    "typescript": "^3.7.5"
+    "@types/react": "^16.9.0",
+    "typescript": "^3.8.3"
   },
   "prepublish": "tsc",
   "repository": {
@@ -26,6 +26,5 @@
     "react",
     "react-hooks",
     "pg"
-  ],
-  "dependencies": {}
+  ]
 }

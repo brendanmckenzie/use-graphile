@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 export type TextAreaProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLTextAreaElement>,
