@@ -13,7 +13,11 @@ export type MultiField<T> = {
   add: () => void;
   reset: () => void;
   set: (value: T[]) => void;
-  renderItems: (render: (i: MultiFieldItem<T>) => any, sortBy?: string) => any;
+  renderItems: (
+    render: (i: MultiFieldItem<T>) => any,
+    filter?: (i: T) => boolean,
+    sortBy?: string
+  ) => any;
 };
 
 export type MultiFieldOptions<T> = {
@@ -47,52 +51,55 @@ export const multi = <T>(
     set: (value: T[]) => onChange(key, { nodes: value }),
     renderItems: (
       render: (i: MultiFieldItem<T>) => any,
+      filter?: (i: T) => boolean,
       sortBy: string | null = null
     ) => {
       const sortedItems = sorted(items, sortBy);
       const sortedInitialItems = sorted(initialItems, sortBy);
 
-      return sortedItems.map((item: any, index: number) => {
-        const handleChange = (itemKey: string, itemValue: any) => {
-          onChange(key, {
-            nodes: sortedItems.map((ent, i) => {
-              if (i === index) {
-                return {
-                  ...ent,
-                  [itemKey]: itemValue
-                };
-              }
-              return ent;
-            })
-          });
-        };
-        const i: MultiFieldItem<T> = {
-          index,
-          item,
-          remove: () => {
+      return sortedItems
+        .filter((ent) => !filter || filter(ent))
+        .map((item: any, index: number) => {
+          const handleChange = (itemKey: string, itemValue: any) => {
             onChange(key, {
-              nodes: sortedItems.filter((_, i) => i !== index)
-            });
-          },
-          ...buildOps<T>(
-            sortedItems[index],
-            sortedInitialItems[index],
-            values =>
-              onChange(key, {
-                nodes: sortedItems.map((ent, i) =>
-                  i === index ? values || {} : ent
-                )
+              nodes: sortedItems.map((ent, i) => {
+                if (i === index) {
+                  return {
+                    ...ent,
+                    [itemKey]: itemValue,
+                  };
+                }
+                return ent;
               }),
-            handleChange
-          )
-        };
+            });
+          };
+          const i: MultiFieldItem<T> = {
+            index,
+            item,
+            remove: () => {
+              onChange(key, {
+                nodes: sortedItems.filter((_, i) => i !== index),
+              });
+            },
+            ...buildOps<T>(
+              sortedItems[index],
+              sortedInitialItems[index],
+              (values) =>
+                onChange(key, {
+                  nodes: sortedItems.map((ent, i) =>
+                    i === index ? values || {} : ent
+                  ),
+                }),
+              handleChange
+            ),
+          };
 
-        return React.createElement(React.Fragment, {
-          key: item.id || index,
-          children: render(i)
+          return React.createElement(React.Fragment, {
+            key: item.id || index,
+            children: render(i),
+          });
         });
-      });
-    }
+    },
   };
 
   return render(m);

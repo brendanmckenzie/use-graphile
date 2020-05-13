@@ -12,6 +12,6 @@ export const radio = (
     type: "radio",
     value: itemValue,
     checked: value === itemValue,
-    onChange: (ev) => onChange(key, ev.currentTarget.value),
+    onChange: (ev) => onChange(key, itemValue),
   };
 };

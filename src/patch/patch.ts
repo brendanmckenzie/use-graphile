@@ -10,7 +10,12 @@ const parseValue = (type: string, value: any) => {
       }
       return parseFloat(value);
     case "string[]":
-      return (value || "").split(",").filter((a: any) => !!a);
+      return (value || "")
+        .split(",")
+        .filter((a: any) => !!a)
+        .map((a: any) => a.trim());
+    case "boolean":
+      return value ?? false;
     case "date":
     case "string":
     default:
@@ -43,13 +48,13 @@ export const buildPatch = (
       // link multi field
       return {
         ...p,
-        ...patchMulti(config, fieldDef as FieldDef, originalVal, newVal)
+        ...patchMulti(config, fieldDef as FieldDef, originalVal, newVal),
       };
     } else if (config[type]) {
       // link field
       return {
         ...p,
-        ...patchLink(config, fieldDef as FieldDef, originalVal, newVal)
+        ...patchLink(config, fieldDef as FieldDef, originalVal, newVal),
       };
     } else {
       // standard field
@@ -59,7 +64,7 @@ export const buildPatch = (
         if (newValues[key] !== undefined || originalValues[key]) {
           return {
             ...p,
-            [key]: parseValue(type, newValues[key])
+            [key]: parseValue(type, newValues[key]),
           };
         }
       }
