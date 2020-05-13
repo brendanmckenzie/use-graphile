@@ -10,6 +10,7 @@ export const radio = (
   return {
     name: key,
     type: "radio",
+    value: itemValue,
     checked: value === itemValue,
     onChange: (ev) => onChange(key, ev.currentTarget.value),
   };
