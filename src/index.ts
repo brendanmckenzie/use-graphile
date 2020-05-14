@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Operations, buildOps } from "./fields";
 
 export { Model } from "./model";
@@ -11,6 +11,7 @@ export type Form<T> = {
 
 export const useForm = <T = any>(initialValues: T = {} as T) => {
   const [values, setValues] = useState<T>(initialValues);
+  useEffect(() => setValues(initialValues), [JSON.stringify(initialValues)]);
 
   const handleChange = (key: string, value: any) =>
     setValues({ ...values, [key]: value });
