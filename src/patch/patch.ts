@@ -10,8 +10,7 @@ const parseValue = (type: string, value: any) => {
       }
       return parseFloat(value);
     case "string[]":
-      return (value || "")
-        .split(",")
+      return (value instanceof Array ? value : (value || "").split(","))
         .filter((a: any) => !!a)
         .map((a: any) => a.trim());
     case "boolean":
@@ -58,7 +57,7 @@ export const buildPatch = (
       };
     } else {
       // standard field
-      if (originalValues[key] === newValues[key]) {
+      if (equal(originalValues[key], newValues[key])) {
         return p;
       } else {
         if (newValues[key] !== undefined || originalValues[key]) {
@@ -72,4 +71,16 @@ export const buildPatch = (
 
     return p;
   }, {});
+};
+
+const equal = (a: any, b: any): boolean => {
+  if (a instanceof Array && b instanceof Array) {
+    if (a.length !== b.length) {
+      return false;
+    }
+
+    const notEqual = a.filter((val, idx) => val !== b[idx]);
+    return notEqual.length === 0;
+  }
+  return a === b;
 };
