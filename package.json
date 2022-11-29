@@ -1,6 +1,6 @@
 {
   "name": "use-graphile",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,8 +11,8 @@
     "react": "^16.13.1"
   },
   "devDependencies": {
-    "@types/react": "^16.9.0",
-    "typescript": "^3.8.3"
+    "@types/react": "^18.0.25",
+    "typescript": "^4.9.3"
   },
   "prepublish": "tsc",
   "repository": {

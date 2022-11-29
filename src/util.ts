@@ -1,7 +1,7 @@
 export const sorted = <T = any>(input: T[], sortBy: string | null): T[] => {
   if (sortBy) {
     const [field, direction] = sortBy.split(" ");
-    let sortedItems = (input as Array<any>).sort((a, b) => {
+    const sortedItems = Array.from<any>(input).sort((a, b) => {
       const aType = typeof a[field];
       const bType = typeof b[field];
       if (aType === bType) {
@@ -16,10 +16,10 @@ export const sorted = <T = any>(input: T[], sortBy: string | null): T[] => {
     });
 
     if (direction === "desc") {
-      sortedItems = sortedItems.reverse();
+      return sortedItems.reverse();
+    } else {
+      return sortedItems;
     }
-
-    return sortedItems;
   }
 
   return input;
