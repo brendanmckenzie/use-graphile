@@ -128,4 +128,47 @@ assertEq(
 );
 assertEq("composed variables include rootPatch", typeof composed.variables.rootPatch, "object");
 
+// --- Case 2: child-only edits (empty root patch) ---
+
+console.log("\n=== Case 2: child-only edit (no root diff) ===");
+const childOnlyPlan = buildOperations(
+  model,
+  "Trip",
+  original,
+  {
+    ...original,
+    tripFlights: {
+      nodes: original.tripFlights.nodes.filter(
+        (f) => f.id !== REMOVED_FLIGHT_ID
+      ),
+    },
+  },
+  { newId: fakeNewId }
+);
+assertEq("child-only: root patch is empty", childOnlyPlan.patch, {});
+assertEq("child-only: one delete op", childOnlyPlan.ops.length, 1);
+
+const childOnlyComposed = composeMutation({
+  rootType: "Trip",
+  rootKind: "update",
+  rootId: TRIP_ID,
+  plan: childOnlyPlan,
+  registry,
+});
+assertEq(
+  "child-only: document omits root mutation",
+  childOnlyComposed.document.includes("root: updateTrip"),
+  false
+);
+assertEq(
+  "child-only: document still includes child op",
+  childOnlyComposed.document.includes("d0: deleteTripFlight"),
+  true
+);
+assertEq(
+  "child-only: variables do not include rootPatch",
+  Object.prototype.hasOwnProperty.call(childOnlyComposed.variables, "rootPatch"),
+  false
+);
+
 console.log("\nAll smoke assertions passed.");

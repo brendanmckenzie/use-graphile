@@ -53,20 +53,25 @@ export const composeMutation = (opts: ComposeOptions): ComposedMutation => {
   const fields: string[] = [];
   const variables: Record<string, any> = {};
 
-  // Root
+  // Root. Skip the update mutation entirely when there are no scalar/FK diffs
+  // on the root — PostGraphile rejects empty patches with "Attempted to update
+  // a record, but no new values were specified." A save document that contains
+  // only child ops is valid.
   if (rootKind === "update") {
     if (!rootEntry.update) {
       throw new Error(
         `use-graphile: registry for '${rootType}' has no 'update' entry`
       );
     }
-    varDefs.push(`$rootId: UUID!`);
-    varDefs.push(`$rootPatch: ${rootEntry.update.patchType}!`);
-    variables.rootId = rootId;
-    variables.rootPatch = plan.patch;
-    fields.push(
-      `  root: ${rootEntry.update.mutation}(input: { id: $rootId, patch: $rootPatch }) ${defaultSelection}`
-    );
+    if (Object.keys(plan.patch).length > 0) {
+      varDefs.push(`$rootId: UUID!`);
+      varDefs.push(`$rootPatch: ${rootEntry.update.patchType}!`);
+      variables.rootId = rootId;
+      variables.rootPatch = plan.patch;
+      fields.push(
+        `  root: ${rootEntry.update.mutation}(input: { id: $rootId, patch: $rootPatch }) ${defaultSelection}`
+      );
+    }
   } else {
     if (!rootEntry.create) {
       throw new Error(
@@ -134,6 +139,12 @@ export const composeMutation = (opts: ComposeOptions): ComposedMutation => {
       }
     }
   });
+
+  if (fields.length === 0) {
+    throw new Error(
+      "use-graphile: composeMutation produced no mutation fields — both root patch and ops are empty"
+    );
+  }
 
   const document =
     `mutation ${mutationName}(${varDefs.join(", ")}) {\n` +
