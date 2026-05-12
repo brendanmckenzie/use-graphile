@@ -1,9 +1,19 @@
 export type FieldDef = {
-  type: "string" | "number" | "date" | "datetime" | string;
+  type: "string" | "string[]" | "number" | "boolean" | "date" | "datetime" | string;
+  /**
+   * For a relation, the column on this entity (multi=false) or on the child
+   * entity (multi=true) that holds the foreign key.
+   *
+   * Forward single (multi=false):
+   *   { type: "Customer", foreignKey: "customerId" }
+   *   → sets parent.customerId = <id> in the parent patch.
+   *
+   * Inverse many (multi=true):
+   *   { type: "TripFlight", multi: true, foreignKey: "tripId" }
+   *   → each created child row gets tripId = <parent.id> applied.
+   */
   multi?: boolean;
-  patchProperty?: string;
-  linkedObject?: boolean;
-  patchWorkaroundProperty?: string; // See: https://github.com/mlipscombe/postgraphile-plugin-nested-mutations/issues/29
+  foreignKey?: string;
 };
 
 export type Model = {

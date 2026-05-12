@@ -1,11 +1,13 @@
 {
   "name": "use-graphile",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "smoke": "tsc scripts/smoke.ts --outDir scripts-dist --target es2020 --module commonjs --esModuleInterop --skipLibCheck && node scripts-dist/scripts/smoke.js"
   },
   "peerDependencies": {
     "react": "^16.13.1"

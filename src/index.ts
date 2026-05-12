@@ -1,8 +1,21 @@
 import { useState } from "react";
 import { Operations, buildOps } from "./fields";
 
-export { Model } from "./model";
-export { buildPatch } from "./patch/patch";
+export { Model, FieldDef } from "./model";
+export {
+  buildOperations,
+  composeMutation,
+  Op,
+  CreateOp,
+  UpdateOp,
+  DeleteOp,
+  SavePlan,
+  MutationRegistry,
+  EntityMutationConfig,
+  BuildOptions,
+  ComposeOptions,
+  ComposedMutation,
+} from "./operations";
 
 export type Form<T> = {
   values: T;

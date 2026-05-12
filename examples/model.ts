@@ -1,59 +1,43 @@
-import { Model } from "use-graphile";
+import { Model, MutationRegistry } from "use-graphile";
 
 export const model: Model = {
-  customer: {
-    name: {
-      type: "string"
-    }
+  Customer: {
+    name: { type: "string" },
   },
-  trip: {
-    name: {
-      type: "string"
-    },
-    customer: {
-      type: "customer"
-    },
-    quotes: {
-      type: "quote",
-      multi: true
-    }
-  },
-  quote: {
-    id: { type: "uuid" },
-    trip: {
-      type: "trip",
-      patchProperty: "tripToTripId"
-    },
-    summary: {
-      type: "string"
-    },
-    quoteDays: {
-      type: "quoteDay",
+  Trip: {
+    name: { type: "string" },
+    customer: { type: "Customer", foreignKey: "customerId" },
+    tripFlights: {
+      type: "TripFlight",
       multi: true,
-      patchProperty: "quoteDaysUsingId"
-    }
+      foreignKey: "tripId",
+    },
   },
-  quoteDay: {
-    order: { type: "number" },
-    activitySummary: { type: "string" },
-    activityDetail: { type: "string" },
-    date: { type: "string" },
-    quoteDayDestinationsByDayId: {
-      type: "quoteDayDestinationsByDayId",
-      multi: true,
-      patchProperty: "quoteDayDestinationsUsingId"
-    }
+  TripFlight: {
+    carrier: { type: "string" },
+    number: { type: "string" },
+    departure: { type: "datetime" },
+    arrival: { type: "datetime" },
+    departureAirport: { type: "Airport", foreignKey: "departureAirportId" },
+    arrivalAirport: { type: "Airport", foreignKey: "arrivalAirportId" },
   },
-  quoteDayDestinationsByDayId: {
-    order: { type: "number" },
-    destination: {
-      type: "destination",
-      patchProperty: "destinationToDestinationId"
-    }
+  Airport: {
+    name: { type: "string" },
   },
-  destination: {
-    name: {
-      type: "string"
-    }
-  }
+};
+
+export const registry: MutationRegistry = {
+  Trip: {
+    update: { mutation: "updateTrip", patchType: "TripPatch" },
+    create: { mutation: "createTrip", inputKey: "trip", inputType: "TripInput" },
+  },
+  TripFlight: {
+    create: {
+      mutation: "createTripFlight",
+      inputKey: "tripFlight",
+      inputType: "TripFlightInput",
+    },
+    update: { mutation: "updateTripFlight", patchType: "TripFlightPatch" },
+    delete: { mutation: "deleteTripFlight" },
+  },
 };
