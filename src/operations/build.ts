@@ -131,6 +131,31 @@ export const buildPatchInternal = (
 
     if (model[fieldType]) {
       const fkPatch = buildLink(fieldDef as FieldDef, originalVal, newVal);
+      // When the link points to the same row, recurse so nested edits on the
+      // linked entity surface as their own update op (v5 has no nested patches).
+      const origId = originalVal?.id ?? null;
+      const newId2 = newVal?.id ?? null;
+      if (origId && newId2 && origId === newId2) {
+        const childOps: Op[] = [];
+        const linkedPatch = buildPatchInternal(
+          model,
+          fieldType,
+          originalVal,
+          newVal,
+          origId,
+          childOps,
+          newId
+        );
+        if (Object.keys(linkedPatch).length > 0) {
+          ops.push({
+            kind: "update",
+            type: fieldType,
+            id: origId,
+            patch: linkedPatch,
+          });
+        }
+        ops.push(...childOps);
+      }
       return { ...p, ...fkPatch };
     }
 
