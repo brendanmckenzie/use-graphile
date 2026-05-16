@@ -26,7 +26,7 @@ export const useForm = <T = any>(initialValues: T = {} as T) => {
   const [values, setValues] = useState<T>(initialValues);
 
   const handleChange = (key: string, value: any) =>
-    setValues({ ...values, [key]: value });
+    setValues(prev => ({ ...prev, [key]: value }));
 
   const g: Form<T> = {
     values,
